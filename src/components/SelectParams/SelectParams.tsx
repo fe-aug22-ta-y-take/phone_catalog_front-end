@@ -1,5 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback } from 'react';
 
 import Select from 'react-select';
 
@@ -13,9 +12,10 @@ type Props = {
   optionsCount: SelectOption[],
   selectLimit: string,
   selectSort: string,
+  searchParams: URLSearchParams,
   setSelectLimit: (limit: string) => void,
-  setSelectSort: (limit: string) => void,
-  setSorting: (order: string, dir: string) => void,
+  setSelectSort: (sort: string) => void,
+  setSearchParams: (search: URLSearchParams) => void,
 };
 
 export const SelectParams: React.FC<Props> = ({
@@ -25,67 +25,34 @@ export const SelectParams: React.FC<Props> = ({
   setSelectLimit,
   selectSort,
   setSelectSort,
-  setSorting,
+  searchParams,
+  setSearchParams,
 }) => {
-  const [selectSorting, setSelectSorting] = useState(selectSort);
-  const [selectCount, setSelectCount] = useState(selectLimit);
-
-  const [searchParams, setSeatchParams] = useSearchParams();
-
-  const quantity = searchParams.get('quantity') || '';
-  const sorting = searchParams.get('sorting') || '';
-
-  const setSelect = (sort: string) => {
-    switch (sort) {
-      case 'ascPrice':
-        setSorting('price', 'asc');
-        break;
-
-      case 'descPrice':
-        setSorting('price', 'desc');
-        break;
-
-      case 'ascYear':
-        setSorting('new', 'asc');
-        break;
-
-      case 'descYear':
-        setSorting('new', 'desc');
-        break;
-
-      case 'default':
-      default:
-        setSorting('', '');
-    }
-  };
-
-  useEffect(() => {
-    setSelect(selectSorting);
-  }, [selectSorting]);
-
   const getValueSorting = useCallback(() => {
-    return selectSorting
-      ? optionsSorting.find(sort => sort.value === selectSorting)
+    return selectSort
+      ? optionsSorting.find(sort => sort.value === selectSort)
       : '';
-  }, [selectSorting]);
+  }, [selectSort]);
 
   const handleChangeSorting = useCallback((newValue: any) => {
-    setSelectSorting(newValue.value);
     setSelectSort(newValue.value);
-    setSeatchParams({ sorting: newValue.value, quantity });
-  }, [selectSorting]);
+
+    searchParams.set('sorting', newValue.value);
+    setSearchParams(searchParams);
+  }, [selectSort]);
 
   const getValueCount = useCallback(() => {
-    return selectCount
-      ? optionsCount.find(count => count.value === selectCount)
-      : 0;
-  }, [selectCount]);
+    return selectLimit
+      ? optionsCount.find(count => count.value === selectLimit)
+      : '';
+  }, [selectLimit]);
 
   const handleChangeCount = useCallback((newValue: any) => {
-    setSelectCount(newValue.value);
     setSelectLimit(newValue.value);
-    setSeatchParams({ quantity: newValue.value, sorting });
-  }, [selectCount]);
+
+    searchParams.set('quantity', newValue.value);
+    setSearchParams(searchParams);
+  }, [selectLimit]);
 
   return (
     <ul className={s.select__list}>
