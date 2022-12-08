@@ -1,1 +1,0 @@
-export { EmptyChosen } from './EmptyChosen';
