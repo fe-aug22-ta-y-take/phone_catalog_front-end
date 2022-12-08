@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import s from './Pagination.module.scss';
 
@@ -40,6 +40,10 @@ export const Pagination: React.FC<Props> = ({
     return currentPage === page;
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, [currentPage]);
+
   return (
     <div className={s.pagination}>
       <ul className={s.pagination__list}>
@@ -61,6 +65,7 @@ export const Pagination: React.FC<Props> = ({
         {getPages(phonesLength).map(page => (
           <li key={page} className={s.pagination__item}>
             <button
+              disabled={checkPage(page)}
               onClick={() => {
                 setSelectOffset(page);
                 setCurrentPage(page);

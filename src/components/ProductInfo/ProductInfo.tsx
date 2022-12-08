@@ -19,8 +19,6 @@ export const ProductInfo: React.FC<Props> = ({ phoneId }) => {
   const similarId = location.pathname
     .slice(location.pathname.lastIndexOf('/') + 1);
 
-  window.console.log(location);
-
   const [phone, setPhone] = useState<PhoneInfo | null>(null);
   const [currentPhone, setCurrentPhone] = useState<PhoneFullInfo>();
   const [similarPhones, setSimilarPhones] = useState<Phone[]>();

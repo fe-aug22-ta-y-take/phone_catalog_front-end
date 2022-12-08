@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+// import { useSearchParams } from 'react-router-dom';
 
 import Select from 'react-select';
 
@@ -29,8 +30,13 @@ export const SelectParams: React.FC<Props> = ({
   const [selectSorting, setSelectSorting] = useState(selectSort);
   const [selectCount, setSelectCount] = useState(selectLimit);
 
-  const setSelect = (sorting: string) => {
-    switch (sorting) {
+  // const [searchParams, setSeatchParams] = useSearchParams();
+
+  // const quantity = searchParams.get('quantity');
+  // const sorting = searchParams.get('sorting');
+
+  const setSelect = (sort: string) => {
+    switch (sort) {
       case 'ascPrice':
         setSorting('price', 'asc');
         break;
@@ -59,13 +65,14 @@ export const SelectParams: React.FC<Props> = ({
 
   const getValueSorting = useCallback(() => {
     return selectSorting
-      ? optionsSorting.find(sorting => sorting.value === selectSorting)
+      ? optionsSorting.find(sort => sort.value === selectSorting)
       : '';
   }, [selectSorting]);
 
   const handleChangeSorting = useCallback((newValue: any) => {
     setSelectSorting(newValue.value);
     setSelectSort(newValue.value);
+    // setSeatchParams({ sorting: newValue.value });
   }, [selectSorting]);
 
   const getValueCount = useCallback(() => {
@@ -77,6 +84,7 @@ export const SelectParams: React.FC<Props> = ({
   const handleChangeCount = useCallback((newValue: any) => {
     setSelectCount(newValue.value);
     setSelectLimit(newValue.value);
+    // setSeatchParams({ quantity: newValue.value });
   }, [selectCount]);
 
   return (
